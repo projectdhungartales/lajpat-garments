@@ -1,4 +1,11 @@
+'use client';
+
+import { useState } from 'react';
+import QuoteFormModal from '@/components/QuoteFormModal';
+
 export default function Products() {
+  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
+
   const products = [
     {
       id: 1,
@@ -88,7 +95,10 @@ export default function Products() {
                     <p className="text-sm font-bold text-slate-900">{product.moq}</p>
                   </div>
                 </div>
-                <button className="w-full py-2 bg-blue-700 text-white font-semibold rounded-lg hover:bg-blue-800 transition">
+                <button
+                  onClick={() => setSelectedProduct(product.name)}
+                  className="w-full py-2 bg-blue-700 text-white font-semibold rounded-lg hover:bg-blue-800 transition"
+                >
                   Request Quote
                 </button>
               </div>
@@ -109,6 +119,13 @@ export default function Products() {
           </button>
         </div>
       </section>
+
+      {/* Quote Form Modal */}
+      <QuoteFormModal
+        isOpen={!!selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+        productName={selectedProduct || ''}
+      />
     </main>
   );
 }
