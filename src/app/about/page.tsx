@@ -1,3 +1,7 @@
+'use client';
+
+import Link from 'next/link';
+
 export default function About() {
   const highlights = [
     {
@@ -24,8 +28,15 @@ export default function About() {
 
   return (
     <main className="min-h-screen bg-white">
+      {/* BREADCRUMB */}
+      <nav className="max-w-6xl mx-auto px-4 py-4 flex items-center gap-2 text-sm text-slate-600">
+        <Link href="/" className="text-blue-900 hover:underline">Home</Link>
+        <span>/</span>
+        <span className="text-slate-900 font-medium">About Us</span>
+      </nav>
+
       {/* HERO */}
-      <section className="py-12 bg-gradient-to-br from-slate-50 to-white border-b border-slate-100">
+      <section className="py-12 bg-gradient-to-br from-slate-50 to-white border-b border-slate-100 animate-fade-in">
         <div className="max-w-6xl mx-auto px-4">
           <h1 className="text-4xl font-bold text-slate-900 mb-2">About Lajpat Fabrics</h1>
           <p className="text-lg text-slate-600">
@@ -36,7 +47,7 @@ export default function About() {
 
       {/* ABOUT SECTION */}
       <section className="py-20 max-w-6xl mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20 animate-fade-in-up">
           <div>
             <h2 className="text-3xl font-bold text-slate-900 mb-6">Who We Are</h2>
             <p className="text-slate-600 mb-4 leading-relaxed">
@@ -49,7 +60,7 @@ export default function About() {
               Whether you&apos;re a small retail shop or a large distributor, we have the perfect products and pricing to meet your needs.
             </p>
           </div>
-          <div className="rounded-2xl overflow-hidden shadow-xl h-96 bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
+          <div className="rounded-2xl overflow-hidden shadow-xl h-96 bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center animate-slide-in">
             <span className="text-8xl">🏢</span>
           </div>
         </div>
@@ -57,7 +68,7 @@ export default function About() {
         {/* HIGHLIGHTS */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
           {highlights.map((highlight, i) => (
-            <div key={i} className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100">
+            <div key={i} className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100 animate-fade-in-up" style={{ animationDelay: `${i * 100}ms` }}>
               <div className="text-4xl mb-4">{highlight.icon}</div>
               <h3 className="font-bold text-slate-900 mb-2">{highlight.title}</h3>
               <p className="text-slate-600 text-sm">{highlight.description}</p>

@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 import Toast from '@/components/Toast';
 
@@ -91,8 +92,15 @@ export default function Contact() {
 
   return (
     <main className="min-h-screen bg-white">
+      {/* BREADCRUMB */}
+      <nav className="max-w-6xl mx-auto px-4 py-4 flex items-center gap-2 text-sm text-slate-600">
+        <Link href="/" className="text-blue-900 hover:underline">Home</Link>
+        <span>/</span>
+        <span className="text-slate-900 font-medium">Contact</span>
+      </nav>
+
       {/* HERO */}
-      <section className="py-12 bg-gradient-to-br from-slate-50 to-white border-b border-slate-100">
+      <section className="py-12 bg-gradient-to-br from-slate-50 to-white border-b border-slate-100 animate-fade-in">
         <div className="max-w-6xl mx-auto px-4">
           <h1 className="text-4xl font-bold text-slate-900 mb-2">Contact Us</h1>
           <p className="text-lg text-slate-600">
@@ -105,7 +113,7 @@ export default function Contact() {
       <section className="py-20 max-w-6xl mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
           {contactInfo.map((info, i) => (
-            <div key={i} className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100 text-center">
+            <div key={i} className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100 text-center animate-fade-in-up" style={{ animationDelay: `${i * 100}ms` }}>
               <div className="text-4xl mb-3">{info.icon}</div>
               <h3 className="font-bold text-slate-900 mb-2">{info.title}</h3>
               <p className="text-slate-600 text-sm">{info.details}</p>
