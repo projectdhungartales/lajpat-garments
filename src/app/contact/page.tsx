@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Toast from '@/components/Toast';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -11,19 +12,51 @@ export default function Contact() {
     message: '',
   });
 
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formData.name.trim()) newErrors.name = 'Name is required';
+    if (!formData.email.trim()) newErrors.email = 'Email is required';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Invalid email address';
+    if (!formData.phone.trim()) newErrors.phone = 'Phone is required';
+    else if (!/^[\d\s\-\+\(\)]{10,}$/.test(formData.phone.replace(/\s/g, ''))) newErrors.phone = 'Invalid phone number';
+    if (!formData.subject.trim()) newErrors.subject = 'Subject is required';
+    if (!formData.message.trim()) newErrors.message = 'Message is required';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value,
     }));
+    // Clear error for this field
+    if (errors[name]) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      setToast({ message: 'Please fix the errors above', type: 'error' });
+      return;
+    }
+
     // In a real app, send to backend
     console.log('Form submitted:', formData);
-    alert('Thank you! We will contact you soon.');
+    setToast({ message: 'Thank you! We will contact you soon.', type: 'success' });
     setFormData({
       name: '',
       email: '',
@@ -93,10 +126,10 @@ export default function Contact() {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 transition ${errors.name ? 'border-red-500 bg-red-50' : 'border-slate-300'}`}
                   placeholder="Your name"
                 />
+                {errors.name && <p className="text-red-600 text-sm mt-1 animate-slide-in">{errors.name}</p>}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -106,10 +139,10 @@ export default function Contact() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 transition ${errors.email ? 'border-red-500 bg-red-50' : 'border-slate-300'}`}
                     placeholder="your@email.com"
                   />
+                  {errors.email && <p className="text-red-600 text-sm mt-1 animate-slide-in">{errors.email}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">Phone</label>
@@ -118,10 +151,10 @@ export default function Contact() {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 transition ${errors.phone ? 'border-red-500 bg-red-50' : 'border-slate-300'}`}
                     placeholder="+91 XXXXXXXXXX"
                   />
+                  {errors.phone && <p className="text-red-600 text-sm mt-1 animate-slide-in">{errors.phone}</p>}
                 </div>
               </div>
               <div>
@@ -130,8 +163,7 @@ export default function Contact() {
                   name="subject"
                   value={formData.subject}
                   onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 transition ${errors.subject ? 'border-red-500 bg-red-50' : 'border-slate-300'}`}
                 >
                   <option value="">Select a subject</option>
                   <option value="inquiry">Product Inquiry</option>
@@ -139,6 +171,7 @@ export default function Contact() {
                   <option value="custom">Custom Order</option>
                   <option value="other">Other</option>
                 </select>
+                {errors.subject && <p className="text-red-600 text-sm mt-1 animate-slide-in">{errors.subject}</p>}
               </div>
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">Message</label>
@@ -146,15 +179,15 @@ export default function Contact() {
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
-                  required
                   rows={5}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 transition ${errors.message ? 'border-red-500 bg-red-50' : 'border-slate-300'}`}
                   placeholder="Tell us more about your inquiry..."
                 ></textarea>
+                {errors.message && <p className="text-red-600 text-sm mt-1 animate-slide-in">{errors.message}</p>}
               </div>
               <button
                 type="submit"
-                className="w-full py-3 bg-blue-700 text-white font-semibold rounded-lg hover:bg-blue-800 transition"
+                className="w-full py-3 bg-blue-900 text-white font-semibold rounded-lg hover:bg-blue-950 transition transform hover:scale-105"
               >
                 Send Message
               </button>
@@ -196,17 +229,25 @@ export default function Contact() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-gradient-to-r from-blue-700 to-indigo-600 text-white">
+      <section className="py-20 bg-gradient-to-r from-blue-900 to-teal-700 text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Order?</h2>
           <p className="text-lg mb-8 opacity-90">
             Contact our sales team today for personalized assistance and the best pricing.
           </p>
-          <a href="tel:+919876543210" className="px-8 py-3 bg-white text-blue-700 font-semibold rounded-lg hover:bg-slate-100 transition shadow-lg inline-block">
+          <a href="tel:+919876543210" className="px-8 py-3 bg-white text-blue-900 font-semibold rounded-lg hover:bg-amber-50 transition shadow-lg inline-block transform hover:scale-105">
             Call Us Now
           </a>
         </div>
       </section>
+
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
     </main>
   );
 }

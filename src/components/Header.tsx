@@ -2,9 +2,13 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+
+  const isActive = (path: string) => pathname === path;
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-teal-100 shadow-sm">
@@ -17,13 +21,13 @@ export default function Header() {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
-          <Link href="/products" className="text-slate-700 hover:text-blue-900 transition font-medium">
+          <Link href="/products" className={`transition font-medium ${isActive('/products') ? 'text-blue-900 border-b-2 border-blue-900 pb-1' : 'text-slate-700 hover:text-blue-900'}`}>
             Products
           </Link>
-          <Link href="/about" className="text-slate-700 hover:text-blue-900 transition font-medium">
+          <Link href="/about" className={`transition font-medium ${isActive('/about') ? 'text-blue-900 border-b-2 border-blue-900 pb-1' : 'text-slate-700 hover:text-blue-900'}`}>
             About Us
           </Link>
-          <Link href="/contact" className="bg-blue-900 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-950 transition">
+          <Link href="/contact" className={`px-4 py-2 rounded-full text-sm font-medium transition ${isActive('/contact') ? 'bg-blue-950 text-white' : 'bg-blue-900 text-white hover:bg-blue-950'}`}>
             Contact
           </Link>
         </div>
@@ -42,13 +46,13 @@ export default function Header() {
       {/* Mobile Navigation */}
       {isOpen && (
         <div className="md:hidden bg-white border-t border-teal-100 py-4 px-4 flex flex-col gap-4">
-          <Link href="/products" className="text-slate-700 hover:text-blue-900 transition font-medium">
+          <Link href="/products" onClick={() => setIsOpen(false)} className={`transition font-medium ${isActive('/products') ? 'text-blue-900 font-bold' : 'text-slate-700 hover:text-blue-900'}`}>
             Products
           </Link>
-          <Link href="/about" className="text-slate-700 hover:text-blue-900 transition font-medium">
+          <Link href="/about" onClick={() => setIsOpen(false)} className={`transition font-medium ${isActive('/about') ? 'text-blue-900 font-bold' : 'text-slate-700 hover:text-blue-900'}`}>
             About Us
           </Link>
-          <Link href="/contact" className="bg-blue-900 text-white px-4 py-2 rounded-full text-center font-medium hover:bg-blue-950 transition">
+          <Link href="/contact" onClick={() => setIsOpen(false)} className={`px-4 py-2 rounded-full text-sm font-medium transition text-center ${isActive('/contact') ? 'bg-blue-950 text-white' : 'bg-blue-900 text-white hover:bg-blue-950'}`}>
             Contact
           </Link>
         </div>
