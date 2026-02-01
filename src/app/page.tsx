@@ -1,8 +1,13 @@
+'use client';
+
 import HeroSection from "@/components/HeroSection";
 import StatsSection from "@/components/StatsSection";
 import ProductCard from "@/components/ProductCard";
+import QuoteFormModal from "@/components/QuoteFormModal";
+import { useState } from "react";
 
 export default function Home() {
+  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
   const productCategories = [
     {
       title: "Ethnic Wear",
@@ -45,17 +50,25 @@ export default function Home() {
       </section>
 
       {/* CTA SECTION */}
-      <section className="py-20 bg-gradient-to-r from-blue-700 to-indigo-600 text-white">
+      <section className="py-20 bg-gradient-to-r from-blue-900 to-teal-700 text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold mb-4">Ready to Grow Your Business?</h2>
           <p className="text-lg mb-8 opacity-90">
             Join 500+ retailers already sourcing from Lajpat Fabrics. Competitive prices, best quality, fastest delivery.
           </p>
-          <button className="px-8 py-3 bg-white text-blue-700 font-semibold rounded-lg hover:bg-slate-100 transition shadow-lg">
+          <button onClick={() => setSelectedProduct("General Inquiry")} className="px-8 py-3 bg-white text-blue-900 font-semibold rounded-lg hover:bg-amber-50 transition shadow-lg">
             Get Started Today
           </button>
         </div>
       </section>
+
+      {selectedProduct && (
+        <QuoteFormModal 
+          isOpen={true}
+          productName={selectedProduct} 
+          onClose={() => setSelectedProduct(null)} 
+        />
+      )}
     </main>
   );
 }
